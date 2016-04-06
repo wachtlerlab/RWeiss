@@ -99,8 +99,8 @@ def stop():
 
 #Pygame init
 pygame.init()
-pygame.mixer.init(channels=1)
-bell = pygame.mixer.Sound("bell.wav")
+#pygame.mixer.init(channels=1)
+#bell = pygame.mixer.Sound("bell.wav")
 screen = pygame.display.set_mode((10,10))
 
 #Testablauf
@@ -126,7 +126,8 @@ for i in range(exp_data.shape[0]):
         port.write(tstring)
         timeout2 = 1.7 - t_flicker
         timeout = time.time() + time1 + t_flicker + timeout2 + time3
-        bell.play(maxtime=300) #beep
+        print '\a' #beep
+        #bell.play(maxtime=300)
         starttime = time.time()
         port.write('S\r') #port start
         while time.time() < timeout:
@@ -149,7 +150,8 @@ for i in range(exp_data.shape[0]):
                         exp_time = endtime - starttime
                         stop()
         port.write('X\r') #LED aus
-        bell.play(maxtime=300) #beep
+        #bell.play(maxtime=300)
+        print '\a' #beep
         while starter == 1:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
