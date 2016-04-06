@@ -6,9 +6,9 @@ import csv
 import random
 
 #Experiment settings
-intensity = 254
+intensity = 1023
 color = 'G'
-startmin = .5     #[s], Zeit bis zum Start in min/max
+startmin = .5     #[s], Zeit bis zum Start zwischen min/max
 startmax = 1
 time1 = .3       #[s], Zeit ohne Flicker
 time2 = 1.7       #[s], Zeit in der der Flicker kommen kann (random)
@@ -22,6 +22,30 @@ np.random.shuffle(exp_data)
 if exp_data[0,0] == exp_data[0,1]:
     np.random.shuffle(exp_data)
 else: pass
+
+#Port opening
+port = serial.Serial('/dev/ttyACM0')
+istring = 'I1\r'
+off = 'X\r'
+port.write('F10\r')
+port.write('H200\r')
+port.write('T500\r')
+port.write(off)
+cstring = color + str(intensity) + '\r'
+port.write('S\r')
+time.sleep(1)
+port.write(off)
+port.write(cstring) #Color+Intensity an port
+if color == 'G':
+    port.write('R0\r')
+    port.write('B0\r')
+elif color == 'R':
+    port.write('B0\r')
+    port.write('G0\r')
+elif color == 'B':
+    port.write('R0\r')
+    port.write('G0\r')
+port.write('X\r')
 
 #Ablaufcheck
 print exp_data
@@ -41,9 +65,6 @@ while ablaufcheck:
 #Dateneingabe
 name = raw_input("Testperson: ")
 date = time.strftime("%c", time.localtime())
-istring = 'I1\r'
-off = color + '0\r'
-cstring = color + str(intensity) + '\r'
 
 #Datenausgang
 filename = name + '.csv'
@@ -65,12 +86,6 @@ def exp_save():
     exp_file.close()
     return 0;
 
-#Port opening
-port = serial.Serial('/dev/ttyACM0')
-port.write('R0\r')
-port.write('G0\r')
-port.write('B0\r')
-
 #Durchlauf Ende
 class nextloop(Exception): pass
 def stop():
@@ -84,6 +99,8 @@ def stop():
 
 #Pygame init
 pygame.init()
+pygame.mixer.init(channels=1)
+bell = pygame.mixer.Sound("bell.wav")
 screen = pygame.display.set_mode((10,10))
 
 #Testablauf
@@ -100,42 +117,46 @@ for i in range(exp_data.shape[0]):
                     starter = 1
         t_start = random.randrange(int(10*startmin), int(10*startmax))/10.
         time.sleep(t_start)
-        freq = 'F' + str(exp_data[i,0]) + 'G' + str(exp_data[i,1]) + '\r'
+        freq1 = 'F' + str(exp_data[i,0]) + '\r'
+        freq2 = 'H' + str(exp_data[i,1]) + '\r'
         t_flicker = random.randrange(int(10*time2))/10.
-        tstring = 'T' + str(t_flicker*1000) + '\r'
-        port.write(freq) #Frequenzen an port
-        port.write(cstring) #Color+Intensity an port
+        tstring = 'T' + str(int(time1+t_flicker*1000)) + '\r'
+        port.write(freq1) #Frequenz1 an port
+        port.write(freq2) #Frequenz2 an port
         port.write(tstring)
-        port.write('S\r')
-        print '\a' #beep
-        starttime = time.time()
         timeout2 = 1.7 - t_flicker
         timeout = time.time() + time1 + t_flicker + timeout2 + time3
+        bell.play(maxtime=300) #beep
+        starttime = time.time()
+        port.write('S\r') #port start
         while time.time() < timeout:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         l_pressed = 1
-                        if freq1 != freq2:
+                        result = 0
+                        if exp_data[i,0] != exp_data[i,1]:
                             result = 1
                         endtime = time.time()
                         exp_time = endtime - starttime
                         stop()
                     if event.key == pygame.K_RIGHT:
                         r_pressed = 1
-                        if freq1 == freq2:
+                        result = 0
+                        if exp_data[i,0] == exp_data[i,1]:
                             result = 1
                         endtime = time.time()
                         exp_time = endtime - starttime
                         stop()
         port.write('X\r') #LED aus
-        print '\a' #beep
+        bell.play(maxtime=300) #beep
         while starter == 1:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         l_pressed = 1
-                        if freq1 != freq2:
+                        result = 0
+                        if exp_data[i,0] != exp_data[i,1]:
                             result = 1
                         exp_time = time.time() - starttime
                         exp_save()
@@ -143,7 +164,8 @@ for i in range(exp_data.shape[0]):
                         starter = 0
                     if event.key == pygame.K_RIGHT:
                         r_pressed = 1
-                        if freq1 == freq2:
+                        result = 0
+                        if exp_data[i,0] == exp_data[i,1]:
                             result = 1
                         endtime = time.time()
                         exp_time = endtime - starttime

@@ -1,0 +1,6 @@
+name,date,intensity,color,t_start_interval,time1,time2,time3
+RW,Wed Apr  6 12:20:05 2016,1023,G,0.5,0.3,1.7,0.3
+Freq1,Freq2,t_start,t_flicker,t_keypress,key_pressed,result
+800.0,600.0,0.5,1.0,7.49932599068,n,0
+20.0,800.0,0.5,1.4,1.75514483452,n,0
+20.0,200.0,0.5,1.3,1.66835999489,n,0
