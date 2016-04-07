@@ -14,7 +14,7 @@ time1 = .3       #[s], Zeit ohne Flicker
 time2 = 1.7       #[s], Zeit in der der Flicker kommen kann (random)
 time3 = .3       #[s], Zeit ohne Flicker
 #Ablauf des Experiments: start -> time1 -> time2 (mit flicker) -> time3 -> wait for keyboard input
-### LEFT: JA, RIGHT: NEIN
+### LEFT: NEIN, RIGHT: JA
 
 #Daten einlesen
 exp_data = np.loadtxt("exp1.txt", delimiter=',')
@@ -67,7 +67,7 @@ name = raw_input("Testperson: ")
 date = time.strftime("%c", time.localtime())
 
 #Datenausgang
-filename = name + '.csv'
+filename = name + '_' + time.strftime("%d%m%y_%H%M") + '.csv'
 exp_file = open(filename, "w")
 writer = csv.writer(exp_file)
 writer.writerow(['name', 'date', 'intensity', 'color', 't_start_interval', 'time1', 'time2', 'time3'])
@@ -77,9 +77,9 @@ exp_file.close()
 ### Abspeichern ###
 def exp_save():
     if l_pressed:
-        key = 'y'
-    if r_pressed:
         key = 'n'
+    if r_pressed:
+        key = 'y'
     exp_file = open(filename, "a")
     writer = csv.writer(exp_file)
     writer.writerow([str(exp_data[i,0]), str(exp_data[i,1]), str(t_start), str(time1+t_flicker), str(exp_time), key, str(result)])
@@ -136,7 +136,7 @@ for i in range(exp_data.shape[0]):
                     if event.key == pygame.K_LEFT:
                         l_pressed = 1
                         result = 0
-                        if exp_data[i,0] != exp_data[i,1]:
+                        if exp_data[i,0] == exp_data[i,1]:
                             result = 1
                         endtime = time.time()
                         exp_time = endtime - starttime
@@ -144,7 +144,7 @@ for i in range(exp_data.shape[0]):
                     if event.key == pygame.K_RIGHT:
                         r_pressed = 1
                         result = 0
-                        if exp_data[i,0] == exp_data[i,1]:
+                        if exp_data[i,0] != exp_data[i,1]:
                             result = 1
                         endtime = time.time()
                         exp_time = endtime - starttime
@@ -158,7 +158,7 @@ for i in range(exp_data.shape[0]):
                     if event.key == pygame.K_LEFT:
                         l_pressed = 1
                         result = 0
-                        if exp_data[i,0] != exp_data[i,1]:
+                        if exp_data[i,0] == exp_data[i,1]:
                             result = 1
                         exp_time = time.time() - starttime
                         exp_save()
@@ -167,7 +167,7 @@ for i in range(exp_data.shape[0]):
                     if event.key == pygame.K_RIGHT:
                         r_pressed = 1
                         result = 0
-                        if exp_data[i,0] == exp_data[i,1]:
+                        if exp_data[i,0] != exp_data[i,1]:
                             result = 1
                         endtime = time.time()
                         exp_time = endtime - starttime
