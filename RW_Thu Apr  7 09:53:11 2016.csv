@@ -1,4 +1,0 @@
-name,date,intensity,color,t_start_interval,time1,time2,time3
-RW,Thu Apr  7 09:53:11 2016,1023,G,0.5,0.3,1.7,0.3
-Freq1,Freq2,t_start,t_flicker,t_keypress,key_pressed,result
-600.0,200.0,0.7,1.8,2.87270903587,n,0
