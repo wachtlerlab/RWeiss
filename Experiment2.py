@@ -30,11 +30,11 @@ off = 'X\r'
 port.write('F10\r')
 port.write('H200\r')
 port.write('T500\r')
-port.write(off)
+#port.write(off)
 cstring = color + str(intensity) + '\r'
 port.write('S\r')
-time.sleep(1)
-port.write(off)
+#time.sleep(1)
+#port.write(off)
 port.write(cstring) #Color+Intensity an port
 if color == 'G':
     port.write('R0\r')
@@ -45,7 +45,7 @@ elif color == 'R':
 elif color == 'B':
     port.write('R0\r')
     port.write('G0\r')
-port.write('X\r')
+#port.write('X\r')
 
 #Ablaufcheck
 print exp_data
@@ -92,21 +92,27 @@ def stop():
     #endtime = time.time()
     #exp_time = endtime - starttime
     exp_save()
-    port.write('X\r') #LED aus
+    #port.write('X\r') #LED aus
     pygame.event.clear()
     raise nextloop()
     return;
 
 #Pygame init
 pygame.init()
-#pygame.mixer.init(channels=1)
-#bell = pygame.mixer.Sound("bell.wav")
 screen = pygame.display.set_mode((2000,1500))
 
 #Testablauf
 for i in range(exp_data.shape[0]):
     try:
         print 'press a key to start...'
+        freq1 = 'F' + str(exp_data[i,0]) + '\r'
+        freq2 = 'H' + str(exp_data[i,1]) + '\r'
+        t_flicker = random.randrange(int(10*time2))/10.
+        tstring = 'T' + str(int((time1+t_flicker)*1000)) + '\r'
+        port.write(freq1) #Frequenz1 an port
+        port.write(freq2) #Frequenz2 an port
+        port.write(tstring) #t_flicker an port
+        timeout2 = 1.7 - t_flicker
         starter = 0
         result = 0
         r_pressed = 0
@@ -117,17 +123,8 @@ for i in range(exp_data.shape[0]):
                     starter = 1
         t_start = random.randrange(int(10*startmin), int(10*startmax))/10.
         time.sleep(t_start)
-        freq1 = 'F' + str(exp_data[i,0]) + '\r'
-        freq2 = 'H' + str(exp_data[i,1]) + '\r'
-        t_flicker = random.randrange(int(10*time2))/10.
-        tstring = 'T' + str(int((time1+t_flicker)*1000)) + '\r'
-        port.write(freq1) #Frequenz1 an port
-        port.write(freq2) #Frequenz2 an port
-        port.write(tstring)
-        timeout2 = 1.7 - t_flicker
         timeout = time.time() + time1 + t_flicker + timeout2 + time3
         print '\a' #beep
-        #bell.play(maxtime=300)
         starttime = time.time()
         port.write('S\r') #port start
         while time.time() < timeout:
@@ -149,8 +146,7 @@ for i in range(exp_data.shape[0]):
                         endtime = time.time()
                         exp_time = endtime - starttime
                         stop()
-        port.write('X\r') #LED aus
-        #bell.play(maxtime=300)
+        #port.write('X\r') #LED aus
         print '\a' #beep
         while starter == 1:
             for event in pygame.event.get():
