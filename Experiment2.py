@@ -101,7 +101,7 @@ def stop():
 pygame.init()
 #pygame.mixer.init(channels=1)
 #bell = pygame.mixer.Sound("bell.wav")
-screen = pygame.display.set_mode((10,10))
+screen = pygame.display.set_mode((2000,1500))
 
 #Testablauf
 for i in range(exp_data.shape[0]):

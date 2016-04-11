@@ -67,7 +67,7 @@ name = raw_input("Testperson: ")
 date = time.strftime("%c", time.localtime())
 
 #Datenausgang
-filename = name + '_' + time.strfrime("%d%m%y_%H%M") + '.csv'
+filename = name + '_' + time.strftime("%d%m%y_%H%M") + '.csv'
 exp_file = open(filename, "w")
 writer = csv.writer(exp_file)
 writer.writerow(['name', 'date', 'intensity', 'color', 't_start_interval', 'time1', 'time2', 'time3'])
