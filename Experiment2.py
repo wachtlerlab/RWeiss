@@ -18,10 +18,8 @@ time3 = .3       #[s], Zeit ohne Flicker
 
 #Daten einlesen
 exp_data = np.loadtxt("exp1.txt", delimiter=',')
+exp_data = np.tile(exp_data, (10,1))
 np.random.shuffle(exp_data)
-if exp_data[0,0] == exp_data[0,1]:
-    np.random.shuffle(exp_data)
-else: pass
 
 #Port opening
 port = serial.Serial('/dev/ttyACM0')
