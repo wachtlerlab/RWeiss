@@ -20,7 +20,7 @@ time3 = .3       #[s], Zeit ohne Flicker
 exp_data = np.loadtxt("exp1.txt", delimiter=',')
 exp_data = np.tile(exp_data, (10,1))
 np.random.shuffle(exp_data)
-'''
+
 #Port opening
 port = serial.Serial('/dev/ttyACM0')
 istring = 'I1\r'
@@ -44,9 +44,9 @@ elif color == 'B':
     port.write('R0\r')
     port.write('G0\r')
 #port.write('X\r')
-'''
+
 #Ablaufcheck
-print exp_data.shape
+print exp_data
 ablaufcheck = 1
 while ablaufcheck:
     checkvar = raw_input("ok? [y/n]+Enter ")
@@ -65,7 +65,7 @@ name = raw_input("Testperson: ")
 date = time.strftime("%c", time.localtime())
 
 #Datenausgang
-filename = name + '_' + time.strftime("%d%m%y_%H%M") + '.csv'
+filename = '/home/student/Documents/robin/data/' + name + '_' + time.strftime("%d%m%y_%H%M") + '.csv'
 exp_file = open(filename, "w")
 writer = csv.writer(exp_file)
 writer.writerow(['name', 'date', 'intensity', 'color', 't_start_interval', 'time1', 'time2', 'time3'])
