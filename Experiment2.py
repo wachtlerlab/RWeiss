@@ -3,6 +3,7 @@ import serial
 import time
 import pygame
 import csv
+import os
 import random
 
 #Experiment settings
@@ -127,7 +128,8 @@ for i in range(exp_data.shape[0]):
         t_start = random.randrange(int(10*startmin), int(10*startmax))/10.
         time.sleep(t_start)
         timeout = time.time() + time1 + t_flicker + timeout2 + time3
-        print '\a' #beep
+        #print '\a' #beep
+        os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 500))
         starttime = time.time()
         port.write('S\r') #port start
         while time.time() < timeout:
@@ -150,8 +152,8 @@ for i in range(exp_data.shape[0]):
                         exp_time = endtime - starttime
                         stop()
         #port.write('X\r') #LED aus
-        print '\a' #beep
-        print '\a'
+        #print '\a' #beep
+        os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 400))
         while starter == 1:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
