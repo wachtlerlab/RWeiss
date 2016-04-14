@@ -13,7 +13,7 @@ startmin = 1     #[s], Zeit bis zum Start zwischen min/max
 startmax = 1.5
 time1 = .5       #[s], Zeit ohne Flicker
 time2 = 1.7       #[s], Zeit in der der Flicker kommen kann (random)
-time3 = .3       #[s], Zeit ohne Flicker
+time3 = .5       #[s], Zeit ohne Flicker
 #Ablauf des Experiments: start -> time1 -> time2 (mit flicker) -> time3 -> wait for keyboard input
 ### LEFT: NEIN, RIGHT: JA
 
@@ -111,7 +111,8 @@ for i in range(exp_data.shape[0]):
                     starter = 1
         freq1 = 'F' + str(exp_data[i,0]) + '\r'
         freq2 = 'H' + str(exp_data[i,1]) + '\r'
-        t_flicker = random.randrange(int(10*time2))/10.
+        #t_flicker = random.randrange(int(10*time2))/10.
+        t_flicker = 1.7
         tstring = 'T' + str(int((time1+t_flicker)*1000)) + '\r'
         port.write(freq1) #Frequenz1 an port
         port.write(freq2) #Frequenz2 an port
@@ -129,9 +130,9 @@ for i in range(exp_data.shape[0]):
         time.sleep(t_start)
         timeout = time.time() + time1 + t_flicker + timeout2 + time3
         #print '\a' #beep
-        os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 500))
         starttime = time.time()
         port.write('S\r') #port start
+        os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 500))
         while time.time() < timeout:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
