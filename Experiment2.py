@@ -18,7 +18,7 @@ time3 = .5       #[s], Zeit ohne Flicker
 ### LEFT: NEIN, RIGHT: JA
 
 #Daten einlesen
-exp_data = np.loadtxt("exp1.txt", delimiter=',')
+exp_data = np.loadtxt("exp2.txt", delimiter=',')
 exp_data = np.tile(exp_data, (10,1))
 np.random.shuffle(exp_data)
 
