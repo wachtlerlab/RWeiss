@@ -8,9 +8,9 @@ import random
 #Experiment settings
 intensity = 1023
 color = 'G'
-startmin = .5     #[s], Zeit bis zum Start zwischen min/max
-startmax = 1
-time1 = .3       #[s], Zeit ohne Flicker
+startmin = 1     #[s], Zeit bis zum Start zwischen min/max
+startmax = 1.5
+time1 = .5       #[s], Zeit ohne Flicker
 time2 = 1.7       #[s], Zeit in der der Flicker kommen kann (random)
 time3 = .3       #[s], Zeit ohne Flicker
 #Ablauf des Experiments: start -> time1 -> time2 (mit flicker) -> time3 -> wait for keyboard input
@@ -103,6 +103,11 @@ screen = pygame.display.set_mode((2000,1500))
 for i in range(exp_data.shape[0]):
     try:
         print 'press a key to start...'
+        starter = 0
+        while time.time() < time.time()+.2:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    starter = 1
         freq1 = 'F' + str(exp_data[i,0]) + '\r'
         freq2 = 'H' + str(exp_data[i,1]) + '\r'
         t_flicker = random.randrange(int(10*time2))/10.
@@ -111,7 +116,6 @@ for i in range(exp_data.shape[0]):
         port.write(freq2) #Frequenz2 an port
         port.write(tstring) #t_flicker an port
         timeout2 = 1.7 - t_flicker
-        starter = 0
         result = 0
         r_pressed = 0
         l_pressed = 0
@@ -146,6 +150,7 @@ for i in range(exp_data.shape[0]):
                         stop()
         #port.write('X\r') #LED aus
         print '\a' #beep
+        print '\a'
         while starter == 1:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
