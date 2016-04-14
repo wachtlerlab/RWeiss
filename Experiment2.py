@@ -102,9 +102,9 @@ screen = pygame.display.set_mode((2000,1500))
 #Testablauf
 for i in range(exp_data.shape[0]):
     try:
-        print 'press a key to start...'
         starter = 0
-        while time.time() < time.time()+.2:
+        waittime = 0.2 + time.time()
+        while time.time() < waittime:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     starter = 1
@@ -119,6 +119,7 @@ for i in range(exp_data.shape[0]):
         result = 0
         r_pressed = 0
         l_pressed = 0
+        print 'press a key to start...'
         while starter == 0:  #Wartet bis Testperson bereit fuer naechsten Durchlauf
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
