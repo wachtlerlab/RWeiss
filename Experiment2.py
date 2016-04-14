@@ -111,8 +111,7 @@ for i in range(exp_data.shape[0]):
                     starter = 1
         freq1 = 'F' + str(exp_data[i,0]) + '\r'
         freq2 = 'H' + str(exp_data[i,1]) + '\r'
-        #t_flicker = random.randrange(int(10*time2))/10.
-        t_flicker = 1.7
+        t_flicker = random.randrange(int(10*time2))/10.
         tstring = 'T' + str(int((time1+t_flicker)*1000)) + '\r'
         port.write(freq1) #Frequenz1 an port
         port.write(freq2) #Frequenz2 an port
