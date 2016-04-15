@@ -84,8 +84,6 @@ def exp_save():
     writer = csv.writer(exp_file)
     writer.writerow([str(exp_data[i,0]), str(exp_data[i,1]), str(t_start), str(time1+t_flicker), str(exp_time), key, str(result)])
     exp_file.close()
-    beep1.join()
-    beep2.join()
     return 0;
 
 #Durchlauf Ende
@@ -96,6 +94,10 @@ def stop():
     exp_save()
     #port.write('X\r') #LED aus
     pygame.event.clear()
+    beep1.terminate()
+    beep2.terminate()
+    beep1 = Process(target=beep, args=(500,))
+    beep2 = Process(target=beep, args=(400,))
     raise nextloop()
     return;
 
