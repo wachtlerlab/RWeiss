@@ -104,9 +104,8 @@ pygame.init()
 screen = pygame.display.set_mode((2000,1500))
 def beep(freq):
     os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, freq))
-    return;
-beep1 = Process(target=beep, args=(500,))
-beep2 = Process(target=beep, args=(400,))
+beep1 = Process(target=beep(500))
+beep2 = Process(target=beep(400))
 
 
 #Testablauf
