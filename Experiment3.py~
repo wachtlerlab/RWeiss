@@ -4,7 +4,7 @@ import time
 import pygame
 import csv
 import os
-from multiprocessing import Process
+from multiprocessing import Pool
 import random
 
 #Experiment settings
@@ -94,22 +94,16 @@ def stop():
     exp_save()
     #port.write('X\r') #LED aus
     pygame.event.clear()
-    beep1.join()
-    beep2.join()
-    beep1 = Process(target=beep, args=(500,))
-    beep2 = Process(target=beep, args=(400,))
     raise nextloop()
     return;
 
 #Pygame init
 pygame.init()
 screen = pygame.display.set_mode((2000,1500))
+pool = Pool(4)
 def beep(freq):
     os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, freq))
     return;
-beep1 = Process(target=beep, args=(500,))
-beep2 = Process(target=beep, args=(400,))
-
 
 #Testablauf
 for i in range(exp_data.shape[0]):
@@ -142,7 +136,7 @@ for i in range(exp_data.shape[0]):
         port.write('S\r') #port start
         beeptime_a = time.time()
         #os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 500))
-        beep1.start()
+        beep1 = pool.apply_async(beep(500), (500,))
         starttime = time.time()
         #timeout = beeptime_a + time1 + t_flicker + timeout2 + time3
         timeout = starttime + time1 + t_flicker + timeout2 + time3
@@ -168,7 +162,7 @@ for i in range(exp_data.shape[0]):
         #port.write('X\r') #LED aus
         #print '\a' #beep
         #os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 400))
-        beep2.start()
+        beep2 = pool.apply_async(beep, (400,))
         while starter == 1:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
