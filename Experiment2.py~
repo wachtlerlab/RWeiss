@@ -116,7 +116,7 @@ for i in range(exp_data.shape[0]):
         port.write(freq1) #Frequenz1 an port
         port.write(freq2) #Frequenz2 an port
         port.write(tstring) #t_flicker an port
-        timeout2 = 1.7 - t_flicker
+        timeout2 = time2 - t_flicker
         result = 0
         r_pressed = 0
         l_pressed = 0
@@ -127,13 +127,13 @@ for i in range(exp_data.shape[0]):
                     starter = 1
         t_start = random.randrange(int(10*startmin), int(10*startmax))/10.
         time.sleep(t_start)
-        timeout = time.time() + time1 + t_flicker + timeout2 + time3
         #print '\a' #beep
         port.write('S\r') #port start
         beeptime_a = time.time()
         os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 500))
         starttime = time.time()
-        while time.time() < (timeout+beeptime_a-starttime):
+        timeout = time1 + t_flicker + timeout2 + time3 + beeptime_a
+        while time.time() < timeout:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
