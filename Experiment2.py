@@ -48,15 +48,13 @@ elif color == 'B':
 
 #Ablaufcheck
 print exp_data
+print exp_data.shape
 ablaufcheck = 1
 while ablaufcheck:
     checkvar = raw_input("ok? [y/n]+Enter ")
     if checkvar != 'y':
         ablaufcheck = 1
         np.random.shuffle(exp_data)
-        if exp_data[0,0] == exp_data[0,1]:
-            np.random.shuffle(exp_data)
-        else: pass
         print exp_data
     else:
         ablaufcheck = 0

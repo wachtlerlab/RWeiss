@@ -55,9 +55,6 @@ while ablaufcheck:
     if checkvar != 'y':
         ablaufcheck = 1
         np.random.shuffle(exp_data)
-        if exp_data[0,0] == exp_data[0,1]:
-            np.random.shuffle(exp_data)
-        else: pass
         print exp_data
     else:
         ablaufcheck = 0
@@ -136,7 +133,7 @@ for i in range(exp_data.shape[0]):
         port.write('S\r') #port start
         beeptime_a = time.time()
         #os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 500))
-        beep1 = pool.apply_async(beep(500))
+        beep1 = pool.apply_async(beep, (500, ))
         starttime = time.time()
         #timeout = beeptime_a + time1 + t_flicker + timeout2 + time3
         timeout = starttime + time1 + t_flicker + timeout2 + time3
@@ -162,7 +159,7 @@ for i in range(exp_data.shape[0]):
         #port.write('X\r') #LED aus
         #print '\a' #beep
         #os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, 400))
-        beep2 = pool.apply_async(beep(400))
+        beep2 = pool.apply_async(beep, (400, ))
         while starter == 1:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
