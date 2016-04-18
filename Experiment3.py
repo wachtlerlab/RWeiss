@@ -23,6 +23,7 @@ exp_data = np.loadtxt("exp2.txt", delimiter=',')
 exp_data = np.tile(exp_data, (10,1))
 np.random.shuffle(exp_data)
 
+
 #Port opening
 port = serial.Serial('/dev/ttyACM0')
 istring = 'I1\r'
@@ -65,6 +66,8 @@ date = time.strftime("%c", time.localtime())
 
 #Datenausgang
 filename = '/home/student/Documents/robin/data/' + name + '_' + time.strftime("%d%m%y_%H%M") + '.csv'
+txtname = '/home/student/Documents/robin/data/' + name + '_' + time.strftime("%d%m%y_%H%M") + '.txt'
+np.savetxt(txtname, exp_data, delimiter=',')
 exp_file = open(filename, "w")
 writer = csv.writer(exp_file)
 writer.writerow(['name', 'date', 'intensity', 'color', 't_start_interval', 'time1', 'time2', 'time3'])

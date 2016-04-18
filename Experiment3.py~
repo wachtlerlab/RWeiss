@@ -23,6 +23,7 @@ exp_data = np.loadtxt("exp2.txt", delimiter=',')
 exp_data = np.tile(exp_data, (10,1))
 np.random.shuffle(exp_data)
 
+
 #Port opening
 port = serial.Serial('/dev/ttyACM0')
 istring = 'I1\r'
@@ -65,6 +66,8 @@ date = time.strftime("%c", time.localtime())
 
 #Datenausgang
 filename = '/home/student/Documents/robin/data/' + name + '_' + time.strftime("%d%m%y_%H%M") + '.csv'
+txtname = '/home/student/Documents/robin/data/' + name + '_' + time.strftime("%d%m%y_%H%M") + '.txt'
+np.savetxt(txtname, exp_data, delimiter=',')
 exp_file = open(filename, "w")
 writer = csv.writer(exp_file)
 writer.writerow(['name', 'date', 'intensity', 'color', 't_start_interval', 'time1', 'time2', 'time3'])
@@ -81,8 +84,6 @@ def exp_save():
     writer = csv.writer(exp_file)
     writer.writerow([str(exp_data[i,0]), str(exp_data[i,1]), str(t_start), str(time1+t_flicker), str(exp_time), key, str(result)])
     exp_file.close()
-    pool.close()
-    pool.join()
     return 0;
 
 #Durchlauf Ende
@@ -102,6 +103,7 @@ screen = pygame.display.set_mode((2000,1500))
 def beep(freq):
     os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, freq))
     return;
+pool = Pool(4)
 
 #Testablauf
 for i in range(exp_data.shape[0]):
@@ -129,7 +131,6 @@ for i in range(exp_data.shape[0]):
                 if event.type == pygame.KEYDOWN:
                     starter = 1
         t_start = random.randrange(int(10*startmin), int(10*startmax))/10.
-        pool = Pool(4)
         time.sleep(t_start)
         #print '\a' #beep
         port.write('S\r') #port start
