@@ -23,7 +23,6 @@ exp_data = np.loadtxt("exp2.txt", delimiter=',')
 exp_data = np.tile(exp_data, (10,1))
 np.random.shuffle(exp_data)
 
-
 #Port opening
 port = serial.Serial('/dev/ttyACM0')
 istring = 'I1\r'
