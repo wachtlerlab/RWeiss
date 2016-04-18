@@ -97,10 +97,10 @@ def stop():
 #Pygame init
 pygame.init()
 screen = pygame.display.set_mode((2000,1500))
-pool = Pool(4)
 def beep(freq):
     os.system('play --no-show-progress --null --channels 1 synth %s sine %f' % ( .2, freq))
     return;
+pool = Pool(4)
 
 #Testablauf
 for i in range(exp_data.shape[0]):
@@ -182,6 +182,8 @@ for i in range(exp_data.shape[0]):
                         exp_save()
                         pygame.event.clear()
                         starter = 0
+    except KeyboardInterrupt:
+        pool.terminate()
     except nextloop:
         continue
 
